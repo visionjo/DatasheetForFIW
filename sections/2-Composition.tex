@@ -1,0 +1,116 @@
+\section*{Composition}
+\subsection*{What are the instances? (that is, examples; \eg documents, images, people, countries) Are there multiple types of instances? (\eg movies, users, ratings; people, interactions between them; nodes, edges)}
+\noindent
+{\color{red} The instances of the dataset are pictures of faces, with one face per image.} 
+
+\subsection*{Are relationships between instances made explicit in the data (\eg social network links, user/movie ratings, etc.)?}
+\noindent
+{\color{red} Yes. The data is organized into a two-level hierarchy of folders, with each top-level folder in the hierarchy representing a family. In addition, a relationship adjacency matrix containing all members of the family as nodes is provided.} 
+
+\subsection*{How many instances are there? (of each type, if appropriate)?}
+\noindent
+
+\subsection*{What data does each instance consist of? “Raw” data (\eg unprocessed text or images)? Features/attributes? Is there a label/target associated with instances? If the instances related to people, are subpopulations identified (\eg by age, gender, etc.) and what is their distribution?}
+\noindent Each instance is a pair of subjects labeled with the name of the
+person in the image. Some images contain more than one face.
+The labeled face is the one containing the central pixel of the
+image—other faces should be ignored as “background”.
+
+\subsection*{Is everything included or does the data rely on external resources?
+(\eg websites, tweets, datasets) If external resources, a) are there guarantees that they will exist, and remain constant, over time; b) is there an official archival version; c) are there access restrictions or fees?}
+\noindent The dataset is self-contained.
+
+\subsection*{Are there recommended data splits and evaluation measures? (\eg training, development, testing; accuracy or AUC)}
+\noindent The dataset comes with specified train/test splits such that there is no family overlap between sets. Therefore, no subject overlap between folds either. The data organized as a table of pairs (datatable.csv or datatable.pkl). Each item is listed with following values across the columns: 'fid', 'fold', 'label', 'p1', 'p2', 'type'. 'fid' indicates the family ID as referenced in \gls{fiw}, 'fold' indicates the fold to hold the element out for testing (\ie with remaining folds making up the training set). 'p1' and 'p1' are sample face 1 and 2, respectfully (\ie facial pair). 'label; is ground-truth (\ie 0 if unrelated and 1 if related/ true pair). Finally, 'type indicates the relationship in question (\eg \gls{ms}, \gls{fd}, \etc).
+
+Practitioners train algorithms on the training set and evaluate on the test set in a 5-fold fashion. Final
+performance results are averaged across folds alongside the respective standard deviation.
+In other words, there are 5 train/test subsets of the dataset-each fold, leave out its items for testing, train on other K-1 (\ie 5-1=4) folds, then evaluate on test set unseen \wrt model trained from other folds. This way, all data is used for testing. Furthermore, different training paradigms are allowed while mantaining frozen test sets. As such, we recommend reporting performance on all folds by using leave-one-out cross validation, performing 5 experiments. That is, in each experiment, 4 subsets should be used as a training set and the 5th subset should be used for testing. At a minimum, we recommend reporting the estimated mean accuracy, $$\hat\mu=\frac{\sum^K_{k=1}p_k}{K},$$ where K=5 and $p_k$ is percentage of correct classifications for fold $k$. Along with the standard error of the mean $S_E$ as
+$$
+\mu=\frac{\hat\sigma}{\sqrt{K}},
+$$
+where $\hat\sigma$ is the estimate of the standard deviation, defined as
+$$
+\mu=\sqrt{\frac{\sum^K_{k=1}(p_k-\hat\mu)^2}{K 1}}.$$
+
+\paragraph{Training Paradigms:} As the renowned \gls{lfw}, \gls{fiw} supports three training paradigms for the verification task, with the first two the preferred of \gls{fiw} creators and organizers, however, we decided to include to avoid having reported results that fall outside the two preferred paradigms. Practitioners must clearly state the paradigm followed for all published results.
+
+% \begin{itemize}
+\begin{step}{List-Restricted for Training.}\label{1ststep} 
+This setting does not allow for the family or subject names to be referenced during training or testing. The only labels provided are the ground-truth boolean tags: whether or not a pair of images consist of faces of relatives, and not the identity of the person or any knowledge about family name. Under this paradigm, determining whether multiple pairs of images in the train/test set that belong to the same person(s) and/or family(s) is non-trivial. Such inferences, however, might be made by performing conventional face verification across all pair-wise combinations (\ie opposed to comparing FID.MID references). Thus, training pairs made-up of matched and mismatched pairs, one can use image equivalence to cluster faces of the same family and even a finer-level of person ID. Pair-list file datatable\_restricted.csv is provided with only the labels allowed in this paradigm (\ie essentially the master-pairs-list file with only columns ['p1', 'p2', 'label']).
+    \end{step}
+    \begin{step}{List-Unrestricted for Training.} This setting allows referencing to the family, subjects, and particular type of relationship bonding the pairs of matched faces, while also providing this same information for the mismatched (\ie same number of negatives were generated for each type, however, currently types are just being used for analysis of the different types, though certainly possible to leverage knowledge of specific type during training. The file fidlist.csv lists all the family IDs (FIDs), number of members (\ie member IDs (MIDs)), along with the total number of faces (\ie face IDs (faceIDs)) between all mumbers of respective family. Matched and mismatched pairs should be used directly as provided in pair-lists. For instance, when processing fold-1, the FIDs of this fold and all pairs they make-up are held out for testing (\ie frozen as provided in list). For this, positive\_pairs.csv is provided with fields for 'p1', 'p2', and 'fold'. For instance, say training pair is F0001.MID1-F0001.MID3 are true kin of type \gls{fd}, if the former has 5 facial images and the latter has 3 it is then possible to create $$\binom{n}{2}=\binom{5+3}{2}=28$$. Hence, the practitioner can create arbitrary matching/mismatching pairs to best suit their system. Any pairings created and added to list, whether true or false matches, should only be done on training splits, as the unrestricted paradigm allows training list to be created, but not for performance to be reported. The test data of each fold should remain frozen (\ie unmodified listing of pairs), which then provides platform for fair comparison of performance ratings. We recommend that experimenters first use the List-Restricted paradigm (\ie use provided lists for both train and test). Then, evolve to the List-Unrestricted paradigm if it is believed that the prospective system would benefit from training with more pairs, more metadata, pairs spanning best representation, \etc. In other words, if it seems benefit could be had by modifying list of training items then move from List-Restricted (above) to List-Unrestricted (this). 
+     \end{step}
+    
+    
+\begin{step}{Unrestricted for Training.} Inherits all characterizations of List-Unrestricted paradigm, but now outside data is allowed to be added to the training. This paradigm is discouraged, as newer, larger versions of \gls{fiw} will be continually released and, hence, it will be made sure that no subjects added during training are in anyway a part of testing (\ie not even a subject related to member of test set). Nonetheless, if this paradigm is followed, extensive reporting on the process, sources, and amounts added during training.
+ \end{step}
+Regardless the case, \textbf{it should be made clear which of these two paradigms are followed.}
+% \end{itemize}
+
+\subsection*{What experiments were initially run on this dataset? Have a summary of those results.}
+\noindent \textcolor{red}{
+Four different types of experiments were initially performed on FIW. Those experiments were:  benchmarking kinship verification and family classification; evaluating the proposed semi-supervised clustering method; evaluating CNNs fine-tuned using FIW on KinWild I \& II (i.e., transfer-learning), and measuring human performance on kinship verification with a comparison to top-performing algorithms from previous experiments.} 
+\subsubsection*{\textcolor{red}{Kinship Verification}}
+\textcolor{red}{
+SphereFace, which was fine-tuned on FIW, outperformed other benchmarks with an average accuracy of 69.18 percent, which is 1.31 and 2.11 percent better than ResNet-22+CF and mDML, respectively, which were top the scoring methods prior to the recent release of SphereFace. The highest verification accuracies were achieved on siblings pair types followed by parent-child types, and then grandparent-grandchild. Thus, the wider the generational gap, the wider between appearances of faces.
+}
+
+\subsubsection*{\textcolor{red}{Family Classification}}
+\textcolor{red}{
+The top performance was with the fine- tuned ResNet-22 using Centerface loss with 16.18\%. The naive baseline approach (one-vs-rest linear SVMs on top of deep VGG-Face features) achieved an accuracy of just 3.04 per- cent. Then, by replacing the softmax layer to target the num- ber of families (i.e., 564), and fine-tuning on FIW, the top-1 accuracy was improved (i.e., +7.38 to 10.42 percent)
+}
+
+\subsubsection*{\textcolor{red}{Semi-supervised Clustering}}
+\textcolor{red}{
+Even on the unlabeled data, the proposed method exceeds the K-means baseline. For LCVQE, the pair-wise constraints make the cluster structure unpredictable, vulnerable to deviate from the true one, and, thus, perform worse than the K-means baseline.
+}
+
+\subsubsection*{\textcolor{red}{Transfer Learning}}
+\textcolor{red}{
+The fine tuned network (ResNet + Centerface) performed better in average accuracy than all other methods, while providing less variation in type-specific scores. For KinWild I, we get a 4 percent increase in performance (i.e., from 78.4 to 82.4 percent). For KinWild II, there is a 5.6 percent improvement to 86.6 percent.
+}
+
+\subsubsection*{\textcolor{red}{Human Performance on FIW}}
+\textcolor{red}{
+Human judges had a mean accuracy of 57.5\% with significant variance in accuracy 
+NEEDS TO BE FILLED IN
+}
+
+
+
+\subsection*{Any other comments?}
+
+\subsection*{Is the dataset self-contained, or does it link to or otherwise rely on external resources (\eg websites, tweets, other datasets)?}
+% If it links to or relies on external resources, a) are there guarantees that they will exist, and remain constant, over time; b) are there official archival versions of the complete dataset (\ie including the external resources as they existed at the time the dataset was created); c) are there any restrictions (\eg licenses, fees) associated with any of the external resources that might apply to a future user? Please provide descriptions of all external resources and any restrictions associated with them, as well as links or other access points, as appropriate.
+\noindent The dataset is self-contained.
+
+\subsection*{Does the dataset contain data that might be considered confidential (\eg data that is protected by legal privilege or by doctorpatient confidentiality, data that includes the content of individuals non-public communications)?}
+% If so, please provide a description. 
+
+\noindent No. All data was derived from publicly available news sources. 
+
+\subsection*{Does the dataset contain data that, if viewed directly, might be offensive, insulting, threatening, or might otherwise cause anxiety?}
+% \texttt{If so, please describe why.}}
+No. The dataset only consists of faces and associated names.
+
+\subsection*{Does the dataset relate to people?}
+% \texttt{If not, you may skip the remaining questions in this section.}}\
+\noindent Yes. The dataset contains one or more face images of individuals.
+
+
+\subsection*{Does the dataset identify any subpopulations (\eg by age, gender)?}
+% \texttt{If so, please describe how these subpopulations are identified and provide a description of their respective distributions within the dataset.}}
+
+\noindent While sub-population data was not available at the initial release of the dataset, a subsequent paper2 reports the distribution of images by age, race and gender. Table 2 lists these results. The age, perceived gender and race of each individual in the dataset was collected using Amazon Mechanical Turk, with 3 crowd workers labeling each image. After exact age estimation, the ages were binned into groups of 0-10, 21-40, 41-60 and 60+. 
+
+\subsection*{Is it possible to identify individuals (\ie one or more natural persons), either directly or indirectly (\ie in combination with other data) from the dataset?}
+% If so, please describe how.
+\noindent Each image is annotated with the name of the person that appears
+in the image.
+
+\subsection*{Does the dataset contain data that might be considered sensitive in any way (\eg data that reveals racial or ethnic origins, sexual orientations, religious beliefs, political opinions or union memberships, or locations; financial or health data; biometric or genetic data; forms of government identification, such as social security numbers; criminal history)?}
+% \texttt{If so, please provide a description.}}
+\noindent The dataset does not contain confidential information since all information was scraped from news stories. 
+
+\subsection*{Any other comments?}

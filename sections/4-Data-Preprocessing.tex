@@ -1,0 +1,37 @@
+\section*{Data Preprocessing}
+\subsection*{What preprocessing/cleaning was done? (\eg discretization or bucketing, tokenization, part-of-speech tagging, SIFT feature extraction, removal of instancess, processing of missing values)?}
+% \texttt{If so, please provide a description. If not, you may skip the remainder of the questions in this section.}}
+\noindent The following steps were taken to process the data:
+\begin{enumerate}
+
+\item \paragraph{Gathering raw images} First the raw images for this
+dataset were obtained from the Faces in the Wild dataset
+consisting of images and associated captions gathered from
+news articles found on the web.
+2. Running the Viola-Jones face detector4 The OpenCV version 1.0.0 release 1 implementation of Viola-Jones face detector was used to detect faces in each of these images, using
+the function cvHaarDetectObjects, with the provided Haar
+classifier—cascadehaarcascadefrontalfacedefault.xml. The
+scale factor was set to 1.2, min neighbors was set to 2, and
+the flag was set to CV HAAR DO CANNY PRUNING.
+3. Manually eliminating false positives: If a face was detected and the specified region was determined not to be a
+face (by the operator), or the name of the person with the
+detected face could not be identified (using step 5 below),
+the face was omitted from the dataset.
+4. Eliminating duplicate images: If images were determined
+to have a common original source photograph, they are defined to be duplicates of each other. An attempt was made to
+remove all duplicates but a very small number (that were not
+initially found) might still exist in the dataset. The number
+of remaining duplicates should be small enough so as not
+to significantly impact training/testing. The dataset contains
+distinct images that are not defined to be duplicates but are
+extremely similar. For example, there are pictures of celebrities that appear to be taken almost at the same time by different photographers from slightly different angles. These
+images were not removed.
+5. Labeling (naming) the detected people: The name associated with each person was extracted from the associated
+\end{enumerate}
+
+\subsection*{Was the “raw” data saved in addition to the preprocessed/cleaned data? (\eg to support unanticipated future uses)}
+\noindent
+\subsection*{Is the preprocessing software available?}
+\noindent
+\subsection*{Does this dataset collection/processing procedure achieve the motivation for creating the dataset stated in the first section of this datasheet? If not, what are the limitations?}
+\noindent
