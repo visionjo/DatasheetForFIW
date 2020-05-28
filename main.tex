@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{tikz}
+\usepackage{listings}
 
 \usepackage{amsmath,amssymb,textcomp}
 \everymath{\displaystyle}
@@ -23,11 +24,11 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{mdframed}
-\usepackage{draftwatermark}
+% \usepackage{draftwatermark}
 
 
-\SetWatermarkText{Draft}
-\SetWatermarkScale{2}
+% \SetWatermarkText{Draft}
+% \SetWatermarkScale{2}
 
 \newcolumntype{L}[1]{>{\raggedright\let\newline\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\arraybackslash\hspace{0pt}}m{#1}}
@@ -85,6 +86,30 @@ left=10mm,right=10mm,top=10mm,bottom=15mm}
 \newacronym{lfw}{LFW}{Labeled Faces in the Wild}
 \newacronym{fd}{FD}{Father-Daughter}
 \newacronym{ms}{MS}{Mother-Son}
+
+
+\newcolumntype{L}[1]{>{\\acrodef{fiw}[FIW]{\textit{Families In the Wild}}}}
+
+\newacronym{tsk}{TSKIN}{\textit{Tri-Subject Kinship}}
+
+\newacronym{kfw}{KinFaceW}{\textit{Kin-Faces in the Wild}}
+\newacronym{kfvw}{KFVW}{\textit{KinFaceW Videos}}
+
+\newacronym{rfiw}{RFIW}{\textit{Recognizing Families In the Wild}}
+
+\newacronym{cnn}{CNN}{Convolutional Neural Network}
+\newacronym{lut}{LUT}{Look-Up-Table}
+\newacronym{fr}{FR}{face recognition}
+\newacronym{gan}{GAN}{generative adversarial network}
+
+\newacronym{svm}{SVM}{Support Vector Machine}
+\newacronym{mid}{MID}{Member ID}
+\newacronym{fid}{FID}{Family ID}
+\newacronym{pid}{PID}{Photo ID}
+\newacronym{roc}{ROC}{receiver operating characteristic}
+\newacronym{nrml}{NRML}{Neighborhood Repulsed Metric Learning}
+
+
 
 % % custom title
 % \makeatletter
@@ -155,7 +180,7 @@ left=10mm,right=10mm,top=10mm,bottom=15mm}
 \makeatother
 
 
-\title{\color{white}\LargeA Database for Studying Visual Kinship Recognition Systems \hspace{48mm} FIW Database}
+\title{\color{white}\Large A Database for Studying Visual Kinship Recognition Systems \hspace{48mm} FIW Database}
 
 \author{Joseph Robinson, Northeastern University, MA}
 % * <mzhang1.student@thehudsonschool.org> 2017-03-30T13:34:20.173Z:

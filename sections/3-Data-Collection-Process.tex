@@ -1,13 +1,14 @@
 \section*{Data Collection Process}
 
 % \end{center}
-\subsection*{How was the data associated with each instance acquired? \texttt{Was the data directly observable (\eg raw text, movie ratings), reported by subjects ((\eg survey responses), or indirectly inferred/derived from other data (\eg part-of-speech tags, model-based guesses for age or language)? If data was reported by subjects or indirectly inferred/derived from other data, was the data validated/verified? If so, please describe how.}}
+\subsection*{How was the data associated with each instance acquired?}
+% Was the data directly observable (\eg raw text, movie ratings), reported by subjects ((\eg survey responses), or indirectly inferred/derived from other data (\eg part-of-speech tags, model-based guesses for age or language)? If data was reported by subjects or indirectly inferred/derived from other data, was the data validated/verified? If so, please describe how.
 
 \noindent The names for each person in the dataset were determined by an
 operator by looking at the caption associated with the person’s
 photograph.
 
-\subsection*{What mechanisms or procedures were used to collect the data (\eg hardware apparatus or sensor, manual human curation, software program, software API)?}
+\subsection*{What mechanisms or procedures were used to collect the data (\eg hardware apparatus or sensor, manual human curating, software program, software API)?}
 % How were these mechanisms or procedures validated?
 \noindent The raw images for this dataset were obtained from the Faces in
 the Wild database collected by Tamara Berg at Berkeley3. The images in this database were gathered from news articles on the web using software to crawl news articles.
@@ -23,12 +24,12 @@ illumination, lighting) characteristics, there are many groups that
 have few instances (e.g. only 1.57\% of the dataset consists of
 individuals under 20 years old).
 
-\subsection*{Who was involved in the data collection process (\eg students, crowdworkers, contractors) and how were they compensated (\eg
+\subsection*{Who was involved in the data collection process (\eg students, crowd-workers, contractors) and how were they compensated (\eg
 how much were crowdworkers paid)?}
 
 \noindent Students of NEU.
 
-\subsection*{Over what timeframe was the data collected?}
+\subsection*{Over what time-frame was the data collected?}
 % \texttt{Does this timeframe match the creation timeframe of the data associated with the instances (\eg recent crawl of old news articles)? If not, please describe the timeframe in which the data associated with the instances was created
 
 
@@ -70,17 +71,16 @@ images that we used along with the captions are already public.
 \subsection*{\texttt{d}}
 \noindent 
 
-\subsection*{How was the data collected? (\eg hardware apparatus/sensor, manual human curation, software program, software interface/API)}
+\subsection*{How was the data collected? (\eg hardware apparatus/sensor, manual human curating, software program, software interface/API)}
 \noindent
 
 
-\subsection*{Who was involved in the data collection process? (\eg students, crowdworkers) and how were they compensated (\eg how much were crowdworkers paid)?}
+\subsection*{Who was involved in the data collection process? (\eg students, crowd-workers) and how were they compensated (\eg how much were crowd-workers paid)?}
 \noindent Several student volunteers, along with experts overseeing many of the details. No monetary cost was acquired for this effort.
 
-\subsection*{Over what time-frame was the data collected? Does the collection timeframe match the creation time-frame of the instances?}
+\subsection*{Over what time-frame was the data collected? Does the collection time-frame match the creation time-frame of the instances?}
 \noindent
-\textcolor{red}{
-The dataset was created over a timescale of months. The collection timeframe does not match the creation timeframe.}
+\fls{fiw} was created over a span of months. The time-frame of data (\ie approximately when the images were captured) does not match that of its creation-- imagery was scraped from the web and varies in date, which is metadata we do not have (\ie no evidence or time stamp indicating its originality).
 
 
 \subsection*{Does the dataset contain all possible instances? Or is it a sample (not necessarily random) of instances from a larger set?}
@@ -89,6 +89,5 @@ The dataset was created over a timescale of months. The collection timeframe doe
 \noindent
 \subsection*{Is there information missing from the dataset and why? (this does not include intentionally dropped instances; it might include, \eg redacted text, withheld documents) Is this data missing because it was unavailable?}
 \noindent
-\textcolor{red}{
-No information is missing.
-}
+An abundance of faces have been added, but are not released publicly at this moment. The reason is directly related to the lack of public benchmark with lists including the newest face data. Nonetheless, the added data can be provided upon request; also, updated benchmarks will be released as a part of future work.
+

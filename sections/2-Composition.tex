@@ -5,7 +5,35 @@
 
 \subsection*{Are relationships between instances made explicit in the data (\eg social network links, user/movie ratings, etc.)?}
 \noindent
-{\color{red} Yes. The data is organized into a two-level hierarchy of folders, with each top-level folder in the hierarchy representing a family. In addition, a relationship adjacency matrix containing all members of the family as nodes is provided.} 
+Yes. Explicit relationships are inherent by directory structure. In other words, each folder contains a family. Within each family-folder are subfolders for each member, as is an adjacency matrix describing relationships between members of a given.
+
+\begin{lstlisting}
+- F????/    
+Family archives (1-F, where F is # families)
+  - MID?[?]
+  Face of that member ID (1-K, where K # members)
+  mid.csv:    Member and relationship information
+  * matrix represents relationship
+  * Name    First name or reference.
+  * Gender   [M]ale or [F]emale
+  
+      
+For example:
+\end{lstlisting}
+\begin{center}
+    
+
+\begin{tabular}{cccccc}
+\textbf{MID} &     \textbf{1}   &    \textbf{2} &      \textbf{3} &  \textbf{Name}  &   \textbf{Gender}\\
+\textbf{1} &      0  &     4  &     5&   name1   &  female\\
+\textbf{2}  &     1   &    0  &     1&   name2&     female\\
+\textbf{3} &     5  &     4  &     0&   name3 &  male\\
+\end{tabular}
+\end{center}
+
+which is made-up of three family members, one per MID across down the rows. Hence, the columns defies the relationship between the respective row. Specifically, the example sets MID1 related to MID2 via 4->1 (Parent->Child). Of course, the opposite holds, \ie MID2->MID1 is 1->4 (Child-Parent). This example also has a pair of spouses (\ie related by marriage, and assumed no direct shared ancestors)-- MID1 and MID3 are or were married (or significant others), \ie MID1->MID3 is 5->5. Finally, MID3 is too a parent of MID2, which is not always the case (\ie relationships are considered independent of one-another). In other words, an MID could have several spouses, and multiple children. However, a child can have at most a single father and mother. Thus, siblings of the same or different pair of parents exist throughout. Nonetheless, all the metadata required to identify the specifics are contained within.
+
+
 
 \subsection*{How many instances are there? (of each type, if appropriate)?}
 \noindent
@@ -25,7 +53,7 @@ image—other faces should be ignored as “background”.
 
 Practitioners train algorithms on the training set and evaluate on the test set in a 5-fold fashion. Final
 performance results are averaged across folds alongside the respective standard deviation.
-In other words, there are 5 train/test subsets of the dataset-each fold, leave out its items for testing, train on other K-1 (\ie 5-1=4) folds, then evaluate on test set unseen \wrt model trained from other folds. This way, all data is used for testing. Furthermore, different training paradigms are allowed while mantaining frozen test sets. As such, we recommend reporting performance on all folds by using leave-one-out cross validation, performing 5 experiments. That is, in each experiment, 4 subsets should be used as a training set and the 5th subset should be used for testing. At a minimum, we recommend reporting the estimated mean accuracy, $$\hat\mu=\frac{\sum^K_{k=1}p_k}{K},$$ where K=5 and $p_k$ is percentage of correct classifications for fold $k$. Along with the standard error of the mean $S_E$ as
+In other words, there are 5 train/test subsets of the dataset-each fold, leave out its items for testing, train on other K-1 (\ie 5-1=4) folds, then evaluate on test set unseen with respect to the model trained from other folds. This way, all data is used for testing. Furthermore, different training paradigms are allowed while mantaining frozen test sets. As such, we recommend reporting performance on all folds by using leave-one-out cross validation, performing 5 experiments. That is, in each experiment, 4 subsets should be used as a training set and the 5th subset should be used for testing. At a minimum, we recommend reporting the estimated mean accuracy, $$\hat\mu=\frac{\sum^K_{k=1}p_k}{K},$$ where K=5 and $p_k$ is percentage of correct classifications for fold $k$. Along with the standard error of the mean $S_E$ as
 $$
 \mu=\frac{\hat\sigma}{\sqrt{K}},
 $$
@@ -49,33 +77,28 @@ Regardless the case, \textbf{it should be made clear which of these two paradigm
 % \end{itemize}
 
 \subsection*{What experiments were initially run on this dataset? Have a summary of those results.}
-\noindent \textcolor{red}{
-Four different types of experiments were initially performed on FIW. Those experiments were:  benchmarking kinship verification and family classification; evaluating the proposed semi-supervised clustering method; evaluating CNNs fine-tuned using FIW on KinWild I \& II (i.e., transfer-learning), and measuring human performance on kinship verification with a comparison to top-performing algorithms from previous experiments.} 
-\subsubsection*{\textcolor{red}{Kinship Verification}}
-\textcolor{red}{
-SphereFace, which was fine-tuned on FIW, outperformed other benchmarks with an average accuracy of 69.18 percent, which is 1.31 and 2.11 percent better than ResNet-22+CF and mDML, respectively, which were top the scoring methods prior to the recent release of SphereFace. The highest verification accuracies were achieved on siblings pair types followed by parent-child types, and then grandparent-grandchild. Thus, the wider the generational gap, the wider between appearances of faces.
-}
 
-\subsubsection*{\textcolor{red}{Family Classification}}
-\textcolor{red}{
-The top performance was with the fine- tuned ResNet-22 using Centerface loss with 16.18\%. The naive baseline approach (one-vs-rest linear SVMs on top of deep VGG-Face features) achieved an accuracy of just 3.04 per- cent. Then, by replacing the softmax layer to target the num- ber of families (i.e., 564), and fine-tuning on FIW, the top-1 accuracy was improved (i.e., +7.38 to 10.42 percent)
-}
+Five experiments were initially performed on FIW. Those experiments were kinship verification and family classification; evaluating the proposed semi-supervised clustering method; evaluating CNNs fine-tuned using FIW on KinWild I \& II (i.e., transfer-learning), and measuring human performance on kinship verification with a comparison to top-performing algorithms from previous experiments.
+\subsubsection*{{Kinship Verification}}
+SphereFace CNN, which was fine-tuned on FIW data, outperformed other benchmarks with an average accuracy of 69.18\% (\ie +1.31\% and +2.11\% better than ResNet-22+CF and mDML, respectively). The highest verification score tended to be sibling-types followed by parent-child, and, lastly, grandparent-grandchild. Thus, the larger the generational gap, the harder the problem becomes (\ie the less discriminate facial cues are for determining KIN or NON-KIN).
 
-\subsubsection*{\textcolor{red}{Semi-supervised Clustering}}
-\textcolor{red}{
+
+\subsubsection*{{Family Classification}}
+Family classification also initially saw the top performance as a fine-tuned CNN. Specifically, the ResNet-22 with a Centerface loss obtained an accuracy of 16.18\%. The naive baseline approach (one-vs-rest linear \glspl{svm} on top of deep VGG-Face features) achieved an accuracy of just 3.04\%. Then, by replacing the softmax layer to target the number of families (\ie 564), and fine-tuning on \gls{fiw}, the top-1 accuracy was improved (\ie +7.38 to 10.42 percent)
+
+\subsubsection*{Semi-supervised Clustering}
 Even on the unlabeled data, the proposed method exceeds the K-means baseline. For LCVQE, the pair-wise constraints make the cluster structure unpredictable, vulnerable to deviate from the true one, and, thus, perform worse than the K-means baseline.
-}
 
-\subsubsection*{\textcolor{red}{Transfer Learning}}
-\textcolor{red}{
-The fine tuned network (ResNet + Centerface) performed better in average accuracy than all other methods, while providing less variation in type-specific scores. For KinWild I, we get a 4 percent increase in performance (i.e., from 78.4 to 82.4 percent). For KinWild II, there is a 5.6 percent improvement to 86.6 percent.
-}
 
-\subsubsection*{\textcolor{red}{Human Performance on FIW}}
-\textcolor{red}{
-Human judges had a mean accuracy of 57.5\% with significant variance in accuracy 
-NEEDS TO BE FILLED IN
-}
+\subsubsection*{Transfer Learning}
+The fine tuned CNN (\ie ResNet + Centerface) performed the best, on average, when considering both leader-boards. Furthermore, was its tendancy to yield minimal variation in type-specific scores. On the KinWild I benchmark, we obtained a 4\% improvement upon fine-tuning network on \gls{fiw} data, which is disjoint from that of KinWild (\ie from 78.4\% to 82.4\%). Then, on KinWild II, we improved performance by 5.6\% (\ie from 80.0\% to 86.6\%).
+
+
+\subsubsection*{Human Performance on FIW}
+Human subjects, on average, did not perform so well at recognizing kinship in face photos (\ie a mean accuracy of 57.5\%). This included 150 participants of various backgrounds. In total, there were 200 pairs of faces. Future studies should reduce the sample size (\ie stick to the closest relationship types), and increase the number of samples (\ie human subjects). 
+
+Close to one year after the initial experiment, we conducted the same experiments with the same volunteers (135 of the original 150 subjects were available and willing to provide another sample). We used the same data pairs, but changed only two aspects: (1) we shuffled the order to avoid patterns from previous evaluation, which could have indirect impact on human decisions; and (2) we did not provide prior knowledge of the relationship type. The purpose here was to see whether or not aging factors impacted the average decision (\ie being told it is a grandparent-grandchild pair, and with both faces of children, and the one claimed to be grandparent is noticeably aged or monochrome, then we wanted to see if such evidence was impacting decisions). However, and contrary to our original hypothesis, this was not the case, as nearly the same average score results (\ie 57.8\%).
+
 
 
 
